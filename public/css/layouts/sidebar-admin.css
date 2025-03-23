@@ -1,0 +1,295 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap");
+
+body {
+    font-family: "Open Sans", sans-serif !important;
+    background-color: #f8f9fa;
+}
+
+html,
+body {
+    height: 100%;
+    overflow: hidden;
+    /* Hindari scroll di body */
+}
+
+/* Mencegah scroll saat sidebar terbuka di mobile */
+body.no-scroll {
+    overflow: hidden;
+}
+
+/* ------------ SIDEBAR ------------ */
+.sidebar {
+    height: 100vh;
+    background: #3c4752;
+    color: white;
+    padding-top: 20px;
+    position: fixed;
+    width: 260px;
+    padding-bottom: 30px;
+    transition: transform 0.3s ease-in-out;
+    z-index: 1030;
+    /* box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2); */
+}
+
+/* Profile Info (Avatar, Teks Nama, dan Role) - Sejajar ke Kiri */
+.profile-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    /* Jarak antara gambar dan teks */
+    padding: 10px 15px;
+    margin-bottom: 15px;
+}
+
+.profile-info img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+}
+
+.profile-info div {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.profile-info strong {
+    font-size: 14px;
+}
+
+.profile-info small {
+    font-size: 12px;
+    color: #bbb;
+}
+
+/* Sidebar Links - Bagian menu menu dari sidebar */
+.sidebar a {
+    color: #ddd;
+    text-decoration: none;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    /* border-radius: 8px; */
+}
+
+.sidebar a:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    /* backdrop-filter: blur(10px); */
+    transition: 0.3s ease-in-out;
+}
+
+.sidebar a.active {
+    background: linear-gradient(
+        135deg,
+        rgba(0, 123, 255, 0.4),
+        rgba(0, 123, 255, 0.2)
+    );
+    color: white;
+    /* font-weight: bold; */
+    backdrop-filter: blur(12px);
+    box-shadow: 0px 1px 8px rgba(0, 123, 255, 0.3);
+    transition: 0.3s ease-in-out;
+}
+
+.sidebar a.active::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background: rgba(255, 255, 255, 0.8);
+    /* border-radius: 2px; */
+}
+
+.sidebar a:active {
+    transform: scale(0.98);
+    /* box-shadow: 0px 2px 5px rgba(0, 123, 255, 0.6); */
+}
+
+/* Atur ukuran ikon pada sidebar menu */
+.sidebar a i {
+    font-size: 13px;
+    /* Atur ukuran ikon */
+    width: 16px;
+    /* Agar ikon sejajar dengan teks */
+    text-align: center;
+}
+
+/* Sidebar Item (Tanpa Link) - only -> layanan lab & pemesanan lab (sementara) */
+.sidebar-item {
+    color: #ddd;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    cursor: not-allowed;
+    /* Menunjukkan bahwa ini belum bisa diklik */
+    opacity: 0.6;
+    /* Membuat lebih transparan */
+}
+
+/* ------------- MENU TOGGLE (ICON CLOSE / TUTUP BUKA SIDEBAR) ------------ */
+.menu-toggle {
+    position: absolute;
+    top: 20px;
+    left: 260px;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 1050;
+    color: black;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.sidebar.open + .menu-toggle i {
+    color: white;
+}
+
+/* ------------ LOGOUT BUTTON ------------ */
+.logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: red;
+    padding: 10px 20px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+.logout-btn:hover {
+    background: rgba(255, 0, 0, 0.1);
+}
+
+/* ------------- MAIN CONTENT (HALAMAN UTAMA) ---------- */
+.main-content {
+    margin-left: 250px;
+    transition: margin-left 0.3s ease-in-out;
+    padding: 20px;
+    width: calc(100% - 250px);
+    height: 100vh;
+    /* Pastikan tinggi mengikuti layar */
+    overflow-y: auto;
+    /* Aktifkan scroll hanya untuk konten */
+}
+
+/* ------------- EFEK ANIMASI PUTAR (ICON CLOSE 'X') ---------- */
+.rotate {
+    animation: spin 0.3s ease-in-out;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(180deg);
+    }
+}
+
+/* Menghapus menu toggle / icon close 'x' saat layar full */
+@media (min-width: 769px) {
+    .menu-toggle {
+        display: none;
+    }
+
+    .sidebar {
+        transform: translateX(0) !important;
+    }
+}
+
+/* Responsive Sidebar */
+@media (max-width: 768px) {
+    .sidebar {
+        padding-top: 3rem;
+        width: 250px;
+    }
+
+    .profile-info {
+        gap: 17px;
+    }
+
+    .profile-info img {
+        width: 45px;
+        height: 45px;
+    }
+
+    .profile-info strong {
+        font-size: 14px;
+    }
+
+    .profile-info small {
+        font-size: 11px;
+    }
+
+    /* Sidebar Links */
+    .sidebar a {
+        color: #ddd;
+        text-decoration: none;
+        padding: 13px 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 13.5px;
+        transition: all 0.3s ease-in-out;
+        position: relative;
+        /* border-radius: 8px; */
+    }
+
+    .sidebar a.active {
+        color: white;
+        backdrop-filter: blur(12px);
+        /* box-shadow: 0px 1px 8px rgba(255, 0, 157, 0.3); */
+        box-shadow: none;
+        transition: 0.3s ease-in-out;
+    }
+
+    /* Sidebar Links --> layanan lab & pemesanan lab*/
+    .sidebar-item {
+        color: #ddd !important;
+        padding: 13px 20px;
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        font-size: 13.5px !important;
+        cursor: not-allowed !important;
+        opacity: 0.6 !important;
+    }
+}
+
+/* Saat sidebar dibuka di tampilan mobile, konten bergeser */
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+        transition: margin-left 0.3s ease-in-out;
+        padding-top: 55px;
+        /* Tambahkan jarak atas pada main-content */
+    }
+
+    /* Konten bergeser ke kanan saat sidebar terbuka */
+    .sidebar.open ~ .main-content {
+        margin-left: 250px;
+    }
+
+    .menu-toggle {
+        left: 30px;
+    }
+}

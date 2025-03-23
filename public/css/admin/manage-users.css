@@ -1,0 +1,404 @@
+/*----------- FILTER STATUS (PENDING / ACTIVE) -----------*/
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    /* Memberi jarak antara ikon dan teks */
+    width: 100px;
+    /* Menyesuaikan ukuran */
+    height: 32px;
+    /* Ukuran lebih besar */
+    border-radius: 12px;
+    /* Agar lebih membulat */
+    font-size: 11.5px;
+    /* Sedikit lebih besar */
+    /* font-weight: bold; */
+    /* text-transform: uppercase; */
+    border: none;
+    padding: 5px 10px;
+    /* Padding agar lebih nyaman */
+}
+
+.status-icon {
+    font-size: 13px;
+    /* Ukuran ikon lebih besar dari teks */
+}
+
+/* Warna transparan dengan efek lembut */
+.status-active {
+    background-color: rgba(40, 167, 70, 0.15);
+    /* Hijau muda */
+    color: #28a745;
+}
+
+.status-active .status-icon {
+    color: #28a745;
+    /* Warna ikon sesuai */
+    /* margin-right: 8px; */
+    /* Jarak tambahan khusus untuk status active */
+}
+
+.status-inactive {
+    background-color: rgba(255, 193, 7, 0.15);
+    /* Kuning muda */
+    color: #b68800;
+}
+
+.status-inactive .status-icon {
+    color: #b68800;
+}
+
+.status-high {
+    background-color: rgba(220, 53, 69, 0.15);
+    /* Merah muda */
+    color: #dc3545;
+}
+
+.status-high .status-icon {
+    color: #dc3545;
+}
+
+/*--------------- FILTER ROLE (ADMIN / USER) ---------------*/
+
+.role-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    /* Jarak antara ikon dan teks */
+    width: 100px;
+    /* Menyesuaikan ukuran */
+    height: 32px;
+    /* Ukuran lebih besar */
+    border-radius: 12px;
+    /* Agar lebih membulat */
+    font-size: 11.5px;
+    /* Sedikit lebih besar */
+    border: none;
+    padding: 5px 10px;
+    /* Padding agar lebih nyaman */
+}
+
+.role-icon {
+    font-size: 13px;
+    /* Ukuran ikon lebih besar dari teks */
+}
+
+/* ADMIN ROLE */
+.role-admin {
+    background-color: rgba(52, 58, 64, 0.15);
+    /* Abu-abu lembut */
+    color: #343a40;
+}
+
+.role-admin .role-icon {
+    color: #343a40;
+}
+
+/* USER ROLE */
+.role-user {
+    background-color: rgba(0, 123, 255, 0.15);
+    /* Biru lembut */
+    color: #007bff;
+}
+
+.role-user .role-icon {
+    color: #007bff;
+}
+
+/*------------- ACTION BUTTON (EDITE / DELETE) -------------*/
+
+.action-buttons {
+    display: flex;
+    gap: 6px;
+    /* Jarak antar tombol */
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    /* Ukuran tetap */
+    height: 32px;
+    /* Tinggi tetap */
+    border-radius: 50%;
+    /* Bulat */
+    font-size: 14px;
+    /* Ukuran ikon */
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Warna untuk Edit */
+.btn-edit {
+    background: rgba(255, 193, 7, 0.39);
+    /* Kuning transparan */
+    color: #856404;
+}
+
+.btn-edit:hover {
+    background: rgba(255, 193, 7, 0.6);
+}
+
+/* Warna untuk Hapus */
+.btn-delete {
+    background: rgba(220, 53, 69, 0.39);
+    /* Merah transparan */
+    color: #dc3545;
+}
+
+.btn-delete:hover {
+    background: rgba(220, 53, 69, 0.6);
+}
+
+/*---------------- MODAL ----------------*/
+
+.modal {
+    backdrop-filter: blur(5px); /* Opsional: Efek blur pada backdrop */
+}
+
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.3) !important; /* Samakan opacity */
+}
+
+.modal-header h5 {
+    font-size: 1.2rem !important;
+    padding-bottom: 0.5rem;
+}
+
+.modal-header p {
+    font-size: 0.82rem !important;
+}
+
+/*teks samping kolom input, spt : nama, username, dll..*/
+.modal-body label {
+    padding-top: 0.4rem;
+    font-size: 0.9rem;
+}
+
+.modal-body i {
+    font-size: 1rem !important;
+}
+
+.modal-body input,
+.modal-body select {
+    font-size: 0.72rem;
+    padding: 0.5rem;
+}
+
+/*teks kolom password -> italic fonts*/
+.placeholder-italic::placeholder {
+    font-style: italic;
+}
+
+.modal-body button {
+    font-size: 0.8rem !important;
+    padding: 0.4rem !important;
+}
+
+.modal-body button i {
+    font-size: 0.75rem !important;
+}
+
+/*----------- INPUTAN VALUE ADD MODAL -> NAME, USERNAME, DLL (AGAR FORN TIDAK MIRING SAAT DIISIKAN) -----------*/
+
+/* Placeholder tetap miring */
+.form-control::placeholder {
+    font-style: italic;
+}
+
+/* Teks yang diketik pengguna tetap normal */
+.form-control {
+    font-style: normal;
+}
+
+/*------------ DROPDOWN (FILTER STATUS & ROLE) & BUTTON ADD ------------*/
+
+.glass-button {
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+    font-size: 12px;
+    padding: 12px 20px;
+    width: 125px;
+    color: #4b4b4b;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Hapus outline hitam saat tombol ditekan */
+.glass-button:focus,
+.dropdown-toggle:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Efek shadow sesuai warna tombol saat dropdown ditekan */
+.glass-button:focus.icon-role,
+.dropdown-toggle:focus.icon-role {
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+    border-color: rgba(0, 123, 255, 0.5);
+}
+
+.glass-button:focus.icon-status,
+.dropdown-toggle:focus.icon-status {
+    box-shadow: 0 0 8px rgba(40, 167, 69, 0.5);
+    border-color: rgba(40, 167, 69, 0.5);
+}
+
+.glass-button:focus.icon-add,
+.dropdown-toggle:focus.icon-add {
+    box-shadow: 0 0 8px rgba(253, 126, 20, 0.5);
+    border-color: rgba(253, 126, 20, 0.5);
+}
+
+/* Hover Efek Sesuai Warna */
+.glass-button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.glass-button:hover.icon-role {
+    background: rgba(0, 123, 255, 0.2);
+}
+
+.glass-button:hover.icon-status {
+    background: rgba(40, 167, 69, 0.2);
+}
+
+.glass-button:hover.icon-add {
+    background: rgba(253, 126, 20, 0.2);
+}
+
+/* Warna khusus untuk ikon & teks */
+.icon-role,
+.text-role {
+    color: #007bff;
+}
+
+.icon-status,
+.text-status {
+    color: #28a745;
+}
+
+.icon-add,
+.text-add {
+    color: #fd7e14;
+}
+
+/*----------------- SEARCH -----------------*/
+
+/* Gaya dasar input pencarian */
+.search-input {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 14px;
+    color: #4b4b4b;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+}
+
+/* Efek saat input difokuskan */
+.search-input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 6px 12px rgba(0, 123, 255, 0.2);
+}
+
+/* Tombol cari */
+.search-button {
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 14px;
+    background: #007bff;
+    color: #fff;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+}
+
+/* Efek hover tombol */
+.search-button:hover {
+    color: white;
+    /* transform: translateY(-2px); */
+    background: #0061c9;
+    box-shadow: 0 6px 12px rgba(0, 123, 255, 0.3);
+}
+
+/* Efek hover input */
+.search-input:hover {
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+}
+
+/*------------- MODAL ADD (RESPONSIVE) -------------*/
+
+@media (max-width: 576px) {
+    .modal-dialog {
+        display: flex;
+        justify-content: center;
+        /* Menyusun modal secara horizontal di tengah */
+        align-items: center;
+        /* Menyusun modal secara vertikal di tengah */
+        margin: 0;
+        /* Menghapus margin default modal */
+        max-width: 90%;
+        /* Atur lebar modal agar pas dengan layar mobile */
+        height: 100vh;
+        /* Mengatur tinggi modal sesuai dengan tinggi layar */
+        margin-left: -2%;
+        /* Geser sedikit ke kiri */
+    }
+
+    .modal-content {
+        padding: 1rem;
+    }
+
+    .modal-header h5 {
+        font-size: 1rem !important;
+        padding-bottom: 0.5rem;
+    }
+
+    .modal-header p {
+        font-size: 0.75rem !important;
+    }
+
+    .modal-body i {
+        font-size: 1rem !important;
+    }
+
+    .modal-body label {
+        padding-top: 0.4rem;
+        font-size: 0.7rem;
+        width: 80px;
+    }
+
+    .modal-body input,
+    .modal-body select {
+        font-size: 0.72rem;
+        padding: 0.5rem;
+    }
+
+    .modal-body button {
+        font-size: 0.7rem !important;
+        padding: 0.4rem !important;
+    }
+
+    .modal-body button i {
+        font-size: 0.65rem !important;
+    }
+
+    .icon-small {
+        font-size: 0.2rem !important; /* Sesuaikan dengan ukuran yang diinginkan */
+    }
+}

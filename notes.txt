@@ -1,0 +1,253 @@
+Sistem Pemesanan LAB LRI (Lembaga Riset Internal - UMY)
+
+-> Autentikasi Login (Admin, User)
+-> 3 CRUD : 
+1. User (Atribut : Nama, Email, Password)
+2. Layanan (Atribut : Icon, Nama Lab)
+3. Pesanan (Atribut : Nama, Instansi, Nama Lab, No Wa 'pemesan' (jadi apabila form telah disubmit muncul komfirmasi ke WA pemesan tersebut, misal seperti 'Saya Sudah Memesan Layanan Lab A'), Tanggal Pesan (misal dari tanggal sekian hingga sekian), Keperluan)
+
+jadi disini itu admin bisa membuat 3 CRUD, yakni :
+1. admin bisa membuat akun akun baru untuk User (selain dari user dapat meregistrasikan akunnya, admin juga dapat meregistrasikannya)
+2. admin bisa membuat Layanan (berupa LAB-LAB) misal admin ingin membuat Layanan lab baru, misal lab A, lab B. 
+3. admin dapat membuat Layanan LAB nya itu sendiri (jadi tidak hanya user saja yg bisa membuat pesanan, melainkan admin bisa membuat pesanan nya sendiri untuk user terkait -> user yang sudah terdaftar)
+
+untuk user nya sendiri itu dia juga bisa membuat 1 CRUD, dengan halnya :
+1. user dapat membuat pesanan (menyesuaikan dari apa yang telah di buat oleh admin -> layanan LAB-LAB nya), jadi secara default saat user ingin memesan layanan.. dia menekan card/menu LAB A misal, itu dia otomatis men-set atribut 'Nama Lab' dari apa yang telah dipilihnya, yakni LAB A.
+
+step by step develop :
+1️⃣ Buat Autentikasi (Login & Register)
+2️⃣ Buat CRUD User (Manajemen Akun oleh Admin)
+3️⃣ Buat CRUD Layanan (Lab-Lab yang Bisa Dipesan)
+4️⃣ Buat CRUD Pesanan (Booking Lab oleh User & Admin)
+5️⃣ Tambahkan Notifikasi WhatsApp untuk Pemesanan
+6️⃣ Buat Tampilan dengan Blade Template
+7️⃣ Testing & Deployment
+
+---
+
+model, controller, routes, middleware, blade 
+
+login -> #loginrequest #authenticatedusercontroller 
+regist -> #registeredusercontroller
+
+---
+
+UPDATE users 
+SET status = 'pending' 
+WHERE role = 'user';
+
+tlong rubah saja model dari modal tsb, yg dimana desain nya itu spt putih minimalis, dan elegan! serta untuk modalnya sendiri bserta dengan form inputannya dibuat  kotak gitu (jgn pakai border-radius). lalu stelah itu font nya di kecilkan ukurannya + berwarna abu, dan button nya berwana hijau lebih cerah
+
+saya ingin modifikasi beberapa hal :
+- form lebih di kotak-kotak in
+-teks dari form regis.. dan silahkan isi data.. dibawahnya itu berada di ujung kiri
+- serta teks dari 'silahkan isi data..' itu menyatu degan bg grey nya
+
+---
+
+TELEGRAM BOT :
+
+username : lri_umy_bot (Admin LRI)
+
+https://t.me/lri_umy_bot
+
+token HTTP API : 7396351340:AAG4KD0aEGK1MjaeMTUBkI3MiQHL2U0R8nY
+
+chat ID GRUP (LAB LRI UMY) : -1002613115297
+
+https://api.telegram.org/bot7396351340:AAG4KD0aEGK1MjaeMTUBkI3MiQHL2U0R8nY/sendMessage?chat_id=-1002613115297&text=Mohon%20verifikasi%20aldayanday1!
+
+---
+
+dsni saya update userr table menjadi spt ini, dgn hasil akhir nya ' "id",
+    "name",
+    "username",
+    "password",
+    "role",
+    "status",
+    "remember_token",
+    "created_at",
+    "updated_at",', karean sy ingin login nya nanti pakai username dan password, tidak dengan email :
+
+Schema::table('users', function (Blueprint $table) {
+            // Tambahkan username jika belum ada
+            $table->string('username')->unique()->after('name');
+
+            // Tambahkan role dan status
+            $table->enum('role', ['admin', 'user'])->default('user')->after('password');
+            $table->enum('status', ['pending', 'active'])->default('pending')->after('role');
+
+            // Hapus kolom email dan email_verified_at jika ada
+            $table->dropColumn('email');
+            $table->dropColumn('email_verified_at');
+        });
+
+middleware :
+
+public function handle(Request $request, Closure $next, $role): Response
+    {
+        if (auth()->check() && auth()->user()->role === $role) {
+            return $next($request);
+        }
+        return abort(403, 'Akses ditolak');
+    }
+
+$middleware->alias([
+            'role' => RoleMiddleware::class,
+        ]);
+
+controller (registrasi):
+
+class RegisteredUserController extends Controller
+{
+    public function create()
+    {
+        return view('auth.register');
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'max:255', 'unique:users'],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'username' => $request->username,
+            'password' => Hash::make($request->password),
+            'role' => 'user',
+            'status' => 'pending', // Default pending, harus diverifikasi admin
+        ]);
+
+        event(new Registered($user));
+
+        return redirect()->route('login')->with('status', 'Akun berhasil dibuat! Tunggu verifikasi admin.');
+    }
+}
+
+web.php (sblumnya)
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';
+
+routes auth :
+
+Route::middleware('guest')->group(function () {
+    Route::get('register', [RegisteredUserController::class, 'create'])
+        ->name('register');
+
+    Route::post('register', [RegisteredUserController::class, 'store']);
+
+    Route::get('login', [AuthenticatedSessionController::class, 'create'])
+        ->name('login');
+
+    Route::post('login', [AuthenticatedSessionController::class, 'store']);
+
+    Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
+        ->name('password.request');
+
+    Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])
+        ->name('password.email');
+
+    Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])
+        ->name('password.reset');
+
+    Route::post('reset-password', [NewPasswordController::class, 'store'])
+        ->name('password.store');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('verify-email', EmailVerificationPromptController::class)
+        ->name('verification.notice');
+
+    Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)
+        ->middleware(['signed', 'throttle:6,1'])
+        ->name('verification.verify');
+
+    Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
+        ->middleware('throttle:6,1')
+        ->name('verification.send');
+
+    Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])
+        ->name('password.confirm');
+
+    Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
+
+    Route::put('password', [PasswordController::class, 'update'])->name('password.update');
+
+    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
+        ->name('logout');
+});
+
+
+register blade :
+
+<x-guest-layout>
+    <form method="POST" action="{{ route('register') }}">
+        @csrf
+
+        <!-- Name -->
+        <div>
+            <x-input-label for="name" :value="__('Name')" />
+            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
+            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+        </div>
+
+        <!-- Email Address -->
+        <div class="mt-4">
+            <x-input-label for="email" :value="__('Email')" />
+            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
+            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        </div>
+
+        <!-- Password -->
+        <div class="mt-4">
+            <x-input-label for="password" :value="__('Password')" />
+
+            <x-text-input id="password" class="block mt-1 w-full"
+                            type="password"
+                            name="password"
+                            required autocomplete="new-password" />
+
+            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="mt-4">
+            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+
+            <x-text-input id="password_confirmation" class="block mt-1 w-full"
+                            type="password"
+                            name="password_confirmation" required autocomplete="new-password" />
+
+            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+        </div>
+
+        <div class="flex items-center justify-end mt-4">
+            <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('login') }}">
+                {{ __('Already registered?') }}
+            </a>
+
+            <x-primary-button class="ms-4">
+                {{ __('Register') }}
+            </x-primary-button>
+        </div>
+    </form>
+</x-guest-layout>
+
+tolong revisi/perbaiki untuk kemduia user dapat registrasi dengan berhasil (sebagai user),menggunakan halnya username dan pass saja 
